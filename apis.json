@@ -1,0 +1,51 @@
+{
+    "name": "Fidelity Investments",
+    "description": "Fidelity Investments offers Financial Planning and Advice, Retirement Plans, Wealth Management Services, Trading and Brokerage services, and a wide range of investment products including Mutual Funds, ETFs, Fixed income Bonds and CDs and much more.",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/28319-www-fidelity-com.jpg",
+    "tags": [
+        "api not found",
+        "assets",
+        "financial services",
+        "have api",
+        "marketplaces"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/fidelity-investments\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Fidelity Investments",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/28319-www-fidelity-com.jpg",
+            "humanURL": "https:\/\/www.fidelity.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/fidelity-investments-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/fidelity-investments"
+        },
+        {
+            "type": "Email",
+            "url": "name@fidelity.com"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/Fidelity"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/www.fidelity.com"
+        }
+    ]
+}
