@@ -23,6 +23,10 @@ x-no-public-api-reason: >-
   underlying connections are arranged through institutional onboarding and BD
   agreements rather than a public API program.
 common:
+  - type: GitHubOrganization
+    url: https://github.com/fidelity
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/fidelity-investments
   - type: Website
     url: https://www.fidelity.com/
   - type: Integrations
