@@ -1,0 +1,1203 @@
+# Fidelity Investments - Conceptual GraphQL Schema
+# Derived from public product documentation, Fidelity Institutional / Wealthscape,
+# NetBenefits retirement platform, and standard financial services domain models.
+# Fidelity does not operate a public developer API; this is a conceptual representation.
+
+# -------------------------
+# Enums
+# -------------------------
+
+enum AccountType {
+  INDIVIDUAL
+  JOINT
+  TRUST
+  IRA_TRADITIONAL
+  IRA_ROTH
+  IRA_SEP
+  IRA_SIMPLE
+  PLAN_401K
+  PLAN_403B
+  PLAN_457B
+  PLAN_529
+  HSA
+  BROKERAGE
+  NET_BENEFITS
+  CD
+  ANNUITY
+}
+
+enum OrderType {
+  MARKET
+  LIMIT
+  STOP
+  STOP_LIMIT
+  TRAILING_STOP
+}
+
+enum OrderSide {
+  BUY
+  SELL
+  BUY_TO_OPEN
+  BUY_TO_CLOSE
+  SELL_TO_OPEN
+  SELL_TO_CLOSE
+}
+
+enum OrderStatus {
+  PENDING
+  OPEN
+  PARTIALLY_FILLED
+  FILLED
+  CANCELED
+  REJECTED
+  EXPIRED
+}
+
+enum OrderDuration {
+  DAY
+  GTC
+  EXT
+  GTC_EXT
+  AT_OPEN
+  AT_CLOSE
+}
+
+enum AssetClass {
+  EQUITY
+  FIXED_INCOME
+  MUTUAL_FUND
+  ETF
+  OPTION
+  CD
+  ANNUITY
+  CASH
+  ALTERNATIVE
+}
+
+enum OptionType {
+  CALL
+  PUT
+}
+
+enum InvestmentStyle {
+  GROWTH
+  VALUE
+  BLEND
+  INCOME
+}
+
+enum RatingValue {
+  STRONG_BUY
+  BUY
+  HOLD
+  SELL
+  STRONG_SELL
+}
+
+enum AlertType {
+  PRICE_ABOVE
+  PRICE_BELOW
+  PERCENT_CHANGE
+  VOLUME
+  NEWS
+  EARNINGS
+  DIVIDEND
+  ANALYST_RATING
+}
+
+enum DocumentType {
+  STATEMENT
+  CONFIRMATION
+  TAX_1099_DIV
+  TAX_1099_B
+  TAX_1099_INT
+  TAX_1099_R
+  TAX_5498
+  COST_BASIS
+  PLAN_SUMMARY
+  ANNUAL_REPORT
+}
+
+enum TaxTreatment {
+  TAXABLE
+  TAX_DEFERRED
+  TAX_EXEMPT
+  ROTH
+}
+
+# -------------------------
+# Scalars
+# -------------------------
+
+scalar Date
+scalar DateTime
+scalar Decimal
+scalar JSON
+
+# -------------------------
+# Auth
+# -------------------------
+
+type Auth {
+  token: Token
+  expiresAt: DateTime
+  scopes: [String!]!
+}
+
+type Token {
+  accessToken: String!
+  refreshToken: String
+  tokenType: String!
+  expiresIn: Int!
+}
+
+# -------------------------
+# Customer & Profile
+# -------------------------
+
+type Customer {
+  customerId: ID!
+  profile: Profile!
+  household: Household
+  accounts: [Account!]!
+  watchLists: [WatchList!]!
+  alerts: [Alert!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Profile {
+  profileId: ID!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date
+  ssn: String
+  email: String!
+  phone: String
+  contact: Contact
+  beneficiaries: [Beneficiary!]!
+  trustedContacts: [Contact!]!
+}
+
+type Contact {
+  contactId: ID!
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  postalCode: String
+  country: String
+  phone: String
+  email: String
+}
+
+type Beneficiary {
+  beneficiaryId: ID!
+  firstName: String!
+  lastName: String!
+  relationship: String!
+  percentage: Decimal!
+  dateOfBirth: Date
+  ssn: String
+  contact: Contact
+  contingent: Boolean!
+}
+
+type Household {
+  householdId: ID!
+  name: String!
+  members: [Customer!]!
+  totalValue: Decimal!
+  accounts: [Account!]!
+}
+
+# -------------------------
+# Accounts
+# -------------------------
+
+interface Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+}
+
+type IndividualAccount implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  owner: Customer!
+}
+
+type JointAccount implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  owners: [Customer!]!
+  jointType: String!
+}
+
+type TrustAccount implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  trustName: String!
+  trustees: [Customer!]!
+  trustDate: Date
+}
+
+type IRA implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  owner: Customer!
+  contributionYear: Int
+  contributionLimit: Decimal!
+  ytdContributions: Decimal!
+  requiredMinimumDistribution: Decimal
+}
+
+type RothIRA implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  owner: Customer!
+  contributionLimit: Decimal!
+  ytdContributions: Decimal!
+  incomeLimit: Decimal!
+}
+
+type Plan401k implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  employer: String!
+  planId: String!
+  vestingSchedule: String
+  employerMatchPercentage: Decimal
+  employerMatchLimit: Decimal
+  contributionPercentage: Decimal!
+  loanBalance: Decimal
+}
+
+type Plan403b implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  employer: String!
+  planId: String!
+  vestingSchedule: String
+  contributionPercentage: Decimal!
+}
+
+type Plan529 implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  beneficiary: Beneficiary!
+  state: String!
+  programName: String!
+  ytdContributions: Decimal!
+}
+
+type HSAAccount implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  owner: Customer!
+  contributionLimit: Decimal!
+  ytdContributions: Decimal!
+  investmentThreshold: Decimal
+}
+
+type BrokerageAccount implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  owner: Customer!
+  marginEnabled: Boolean!
+  optionsLevel: Int
+  marginBalance: Margin
+}
+
+type NetBenefitsAccount implements Account {
+  accountId: ID!
+  accountNumber: String!
+  accountType: AccountType!
+  name: String!
+  taxTreatment: TaxTreatment!
+  balance: AccountBalance!
+  positions: Positions!
+  transactions: [Transaction!]!
+  statements: [Statement!]!
+  isActive: Boolean!
+  openedAt: Date!
+  employer: String!
+  planId: String!
+  planName: String!
+  netBenefitsUrl: String
+}
+
+# -------------------------
+# Balances
+# -------------------------
+
+type AccountBalance {
+  totalValue: Decimal!
+  cash: Cash!
+  margin: Margin
+  securities: Securities!
+  unrealizedGainLoss: Decimal!
+  unrealizedGainLossPct: Decimal!
+  dayGainLoss: Decimal!
+  dayGainLossPct: Decimal!
+  asOf: DateTime!
+}
+
+type Cash {
+  available: Decimal!
+  settled: Decimal!
+  unsettled: Decimal!
+  pending: Decimal!
+  moneyMarket: Decimal!
+}
+
+type Margin {
+  equity: Decimal!
+  buyingPower: Decimal!
+  marginBalance: Decimal!
+  marginCallAmount: Decimal
+  maintenanceRequirement: Decimal!
+  shortBalance: Decimal
+}
+
+type Securities {
+  longValue: Decimal!
+  shortValue: Decimal!
+  optionValue: Decimal!
+  mutualFundValue: Decimal!
+  bondValue: Decimal!
+}
+
+# -------------------------
+# Positions and Holdings
+# -------------------------
+
+type Positions {
+  accountId: ID!
+  holdings: [Holding!]!
+  totalValue: Decimal!
+  totalCostBasis: Decimal!
+  totalGainLoss: Decimal!
+  totalGainLossPct: Decimal!
+  asOf: DateTime!
+}
+
+type Holding {
+  holdingId: ID!
+  symbol: Symbol!
+  investment: Investment!
+  quantity: Decimal!
+  costBasis: Decimal!
+  averageCost: Decimal!
+  currentValue: Decimal!
+  currentPrice: Decimal!
+  unrealizedGainLoss: Decimal!
+  unrealizedGainLossPct: Decimal!
+  dayGainLoss: Decimal!
+  percentOfPortfolio: Decimal!
+  position: Position!
+}
+
+type Position {
+  long: Decimal
+  short: Decimal
+  net: Decimal!
+}
+
+# -------------------------
+# Investments / Assets
+# -------------------------
+
+interface Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+}
+
+type Stock implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+  exchange: String!
+  sector: String
+  industry: String
+  marketCap: Decimal
+  peRatio: Decimal
+  eps: Decimal
+  dividendYield: Decimal
+  beta: Decimal
+  analystRatings: [Rating!]!
+  dividendHistory: DividendHistory
+  splitHistory: SplitHistory
+  earnings: [Earning!]!
+}
+
+type ETF implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+  exchange: String!
+  expenseRatio: Decimal!
+  aum: Decimal
+  nav: Decimal
+  premiumDiscount: Decimal
+  category: String
+  investmentStyle: InvestmentStyle
+  topHoldings: [Holding!]!
+  dividendYield: Decimal
+}
+
+type MutualFund implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+  expenseRatio: Decimal!
+  minimumInvestment: Decimal
+  nav: Decimal!
+  navDate: Date
+  category: String
+  investmentStyle: InvestmentStyle
+  fidelityFundNumber: String
+  isZeroExpenseRatio: Boolean!
+  manager: String
+  inceptionDate: Date
+  ytdReturn: Decimal
+  oneYearReturn: Decimal
+  threeYearReturn: Decimal
+  fiveYearReturn: Decimal
+}
+
+type Bond implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String!
+  issuer: String!
+  couponRate: Decimal!
+  maturityDate: Date!
+  faceValue: Decimal!
+  currentPrice: Decimal!
+  yieldToMaturity: Decimal
+  creditRating: String
+  callDate: Date
+  isCallable: Boolean!
+}
+
+type OptionContract implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+  underlyingSymbol: Symbol!
+  optionType: OptionType!
+  strikePrice: Decimal!
+  expirationDate: Date!
+  multiplier: Int!
+  openInterest: OpenInterest
+  greeks: GreeksData
+}
+
+type CD implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+  issuer: String!
+  apy: Decimal!
+  term: Int!
+  maturityDate: Date!
+  faceValue: Decimal!
+  isCallable: Boolean!
+  fdicInsured: Boolean!
+}
+
+type Annuity implements Investment {
+  symbol: Symbol!
+  name: String!
+  assetClass: AssetClass!
+  description: String
+  cusip: String
+  annuityType: String!
+  insurer: String!
+  contractValue: Decimal
+  surrenderCharge: Decimal
+  maturityDate: Date
+  riders: [String!]!
+}
+
+# -------------------------
+# Symbol and Quotes
+# -------------------------
+
+type Symbol {
+  ticker: String!
+  isin: String
+  cusip: String
+  exchange: String
+  type: AssetClass!
+  name: String!
+  isActive: Boolean!
+}
+
+type Quote {
+  symbol: Symbol!
+  lastPrice: Decimal!
+  bidPrice: Decimal
+  askPrice: Decimal
+  bidSize: Int
+  askSize: Int
+  openPrice: Decimal
+  highPrice: Decimal
+  lowPrice: Decimal
+  closePrice: Decimal
+  volume: Int
+  avgVolume: Int
+  change: Decimal!
+  changePct: Decimal!
+  fiftyTwoWeekHigh: Decimal
+  fiftyTwoWeekLow: Decimal
+  marketCap: Decimal
+  isDelayed: Boolean!
+  timestamp: DateTime!
+}
+
+type Price {
+  value: Decimal!
+  currency: String!
+  timestamp: DateTime!
+}
+
+type Trade {
+  tradeId: ID!
+  symbol: Symbol!
+  price: Decimal!
+  quantity: Decimal!
+  side: OrderSide!
+  executedAt: DateTime!
+  exchange: String
+}
+
+type HistoricalData {
+  symbol: Symbol!
+  period: String!
+  candles: [OHLCV!]!
+  adjustedForSplits: Boolean!
+  adjustedForDividends: Boolean!
+}
+
+type OHLCV {
+  date: Date!
+  open: Decimal!
+  high: Decimal!
+  low: Decimal!
+  close: Decimal!
+  volume: Int!
+  adjClose: Decimal
+}
+
+# -------------------------
+# Options
+# -------------------------
+
+type OptionChain {
+  underlyingSymbol: Symbol!
+  underlyingPrice: Decimal!
+  expirationDates: [Date!]!
+  strikes: [Decimal!]!
+  calls: [OptionLeg!]!
+  puts: [OptionLeg!]!
+  timestamp: DateTime!
+}
+
+type OptionLeg {
+  optionContract: OptionContract!
+  bid: Decimal
+  ask: Decimal
+  last: Decimal
+  volume: Int
+  openInterest: Int
+  impliedVolatility: Decimal
+  greeks: GreeksData
+  inTheMoney: Boolean!
+}
+
+type GreeksData {
+  delta: Decimal
+  gamma: Decimal
+  theta: Decimal
+  vega: Decimal
+  rho: Decimal
+  impliedVolatility: Decimal
+}
+
+type OpenInterest {
+  value: Int!
+  date: Date!
+  change: Int
+}
+
+# -------------------------
+# Corporate Actions
+# -------------------------
+
+type Dividend {
+  symbol: Symbol!
+  amount: Decimal!
+  exDate: Date!
+  recordDate: Date
+  paymentDate: Date
+  frequency: String!
+  type: String!
+}
+
+type DividendHistory {
+  symbol: Symbol!
+  dividends: [Dividend!]!
+  fiveYearGrowthRate: Decimal
+  payoutRatio: Decimal
+}
+
+type SplitHistory {
+  symbol: Symbol!
+  splits: [StockSplit!]!
+}
+
+type StockSplit {
+  symbol: Symbol!
+  exDate: Date!
+  ratio: String!
+  toFactor: Int!
+  forFactor: Int!
+}
+
+type Earning {
+  symbol: Symbol!
+  reportDate: Date!
+  fiscalQuarter: String!
+  estimatedEPS: Decimal
+  actualEPS: Decimal
+  surprise: Decimal
+  surprisePct: Decimal
+  revenue: Decimal
+  estimatedRevenue: Decimal
+}
+
+# -------------------------
+# Orders and Transactions
+# -------------------------
+
+interface TradeOrder {
+  orderId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  side: OrderSide!
+  orderType: OrderType!
+  quantity: Decimal!
+  filledQuantity: Decimal!
+  status: OrderStatus!
+  duration: OrderDuration!
+  placedAt: DateTime!
+  updatedAt: DateTime!
+  trades: [Trade!]!
+}
+
+type MarketOrder implements TradeOrder {
+  orderId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  side: OrderSide!
+  orderType: OrderType!
+  quantity: Decimal!
+  filledQuantity: Decimal!
+  status: OrderStatus!
+  duration: OrderDuration!
+  placedAt: DateTime!
+  updatedAt: DateTime!
+  trades: [Trade!]!
+  avgFillPrice: Decimal
+}
+
+type LimitOrder implements TradeOrder {
+  orderId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  side: OrderSide!
+  orderType: OrderType!
+  quantity: Decimal!
+  filledQuantity: Decimal!
+  status: OrderStatus!
+  duration: OrderDuration!
+  placedAt: DateTime!
+  updatedAt: DateTime!
+  trades: [Trade!]!
+  limitPrice: Decimal!
+  avgFillPrice: Decimal
+}
+
+type StopOrder implements TradeOrder {
+  orderId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  side: OrderSide!
+  orderType: OrderType!
+  quantity: Decimal!
+  filledQuantity: Decimal!
+  status: OrderStatus!
+  duration: OrderDuration!
+  placedAt: DateTime!
+  updatedAt: DateTime!
+  trades: [Trade!]!
+  stopPrice: Decimal!
+  avgFillPrice: Decimal
+}
+
+type StopLimitOrder implements TradeOrder {
+  orderId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  side: OrderSide!
+  orderType: OrderType!
+  quantity: Decimal!
+  filledQuantity: Decimal!
+  status: OrderStatus!
+  duration: OrderDuration!
+  placedAt: DateTime!
+  updatedAt: DateTime!
+  trades: [Trade!]!
+  stopPrice: Decimal!
+  limitPrice: Decimal!
+  avgFillPrice: Decimal
+}
+
+type Transaction {
+  transactionId: ID!
+  accountId: ID!
+  type: String!
+  description: String!
+  symbol: Symbol
+  quantity: Decimal
+  price: Decimal
+  amount: Decimal!
+  netAmount: Decimal!
+  commission: Decimal
+  settleDate: Date
+  transactionDate: Date!
+  runningBalance: Decimal
+}
+
+# -------------------------
+# Documents
+# -------------------------
+
+type Statement {
+  statementId: ID!
+  accountId: ID!
+  documentType: DocumentType!
+  periodStart: Date!
+  periodEnd: Date!
+  generatedAt: DateTime!
+  downloadUrl: String
+}
+
+type ConfirmationSlip {
+  confirmationId: ID!
+  orderId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  side: OrderSide!
+  quantity: Decimal!
+  price: Decimal!
+  commission: Decimal
+  netAmount: Decimal!
+  executedAt: DateTime!
+  settleDate: Date!
+  downloadUrl: String
+}
+
+type TaxDocument {
+  taxDocumentId: ID!
+  accountId: ID!
+  documentType: DocumentType!
+  taxYear: Int!
+  totalIncome: Decimal
+  totalFederalTax: Decimal
+  generatedAt: DateTime!
+  downloadUrl: String
+}
+
+type Form1099 {
+  form1099Id: ID!
+  accountId: ID!
+  formType: String!
+  taxYear: Int!
+  ordinaryDividends: Decimal
+  qualifiedDividends: Decimal
+  shortTermGains: Decimal
+  longTermGains: Decimal
+  interestIncome: Decimal
+  foreignTaxPaid: Decimal
+  downloadUrl: String
+}
+
+type CostBasisReport {
+  reportId: ID!
+  accountId: ID!
+  symbol: Symbol!
+  lots: [CostBasisLot!]!
+  totalCostBasis: Decimal!
+  totalGainLoss: Decimal!
+  method: String!
+}
+
+type CostBasisLot {
+  lotId: ID!
+  acquiredDate: Date!
+  quantity: Decimal!
+  costPerShare: Decimal!
+  totalCost: Decimal!
+  currentValue: Decimal!
+  gainLoss: Decimal!
+  isLongTerm: Boolean!
+}
+
+# -------------------------
+# Portfolio Analysis
+# -------------------------
+
+type PortfolioAnalysis {
+  accountId: ID!
+  totalValue: Decimal!
+  performance: PortfolioPerformance!
+  holdings: [PortfolioHolding!]!
+  assetAllocation: JSON
+  sectorAllocation: JSON
+  geographicAllocation: JSON
+  riskScore: Decimal
+  analyzedAt: DateTime!
+}
+
+type PortfolioPerformance {
+  dayReturn: Decimal!
+  dayReturnPct: Decimal!
+  ytdReturn: Decimal!
+  ytdReturnPct: Decimal!
+  oneYearReturn: Decimal
+  oneYearReturnPct: Decimal
+  threeYearReturn: Decimal
+  fiveYearReturn: Decimal
+  inceptionReturn: Decimal
+  benchmarkSymbol: Symbol
+}
+
+type PortfolioHolding {
+  holding: Holding!
+  percentOfPortfolio: Decimal!
+  contributionToReturn: Decimal
+  riskContribution: Decimal
+}
+
+# -------------------------
+# Market Data and Research
+# -------------------------
+
+type MarketData {
+  marketStatus: String!
+  indices: [Quote!]!
+  sectors: [SectorData!]!
+  movers: [Quote!]!
+  timestamp: DateTime!
+}
+
+type SectorData {
+  name: String!
+  symbol: Symbol
+  change: Decimal!
+  changePct: Decimal!
+  volume: Int
+}
+
+type NewsArticle {
+  articleId: ID!
+  headline: String!
+  summary: String
+  source: String!
+  url: String
+  publishedAt: DateTime!
+  relatedSymbols: [Symbol!]!
+  sentiment: String
+}
+
+type Research {
+  researchId: ID!
+  symbol: Symbol!
+  title: String!
+  analyst: Analyst!
+  rating: Rating!
+  priceTarget: Decimal
+  publishedAt: DateTime!
+  summary: String
+  fidelityEquitySummaryScore: Decimal
+}
+
+type Analyst {
+  analystId: ID!
+  name: String!
+  firm: String!
+  specialty: [String!]!
+  averageAccuracy: Decimal
+}
+
+type Rating {
+  ratingId: ID!
+  symbol: Symbol!
+  analyst: Analyst!
+  value: RatingValue!
+  priceTarget: Decimal
+  previousRating: RatingValue
+  ratedAt: DateTime!
+}
+
+# -------------------------
+# Alerts and Watchlists
+# -------------------------
+
+type Alert {
+  alertId: ID!
+  customerId: ID!
+  symbol: Symbol
+  alertType: AlertType!
+  condition: String!
+  threshold: Decimal
+  isActive: Boolean!
+  lastTriggeredAt: DateTime
+  createdAt: DateTime!
+}
+
+type WatchList {
+  watchListId: ID!
+  customerId: ID!
+  name: String!
+  items: [WatchListItem!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type WatchListItem {
+  itemId: ID!
+  symbol: Symbol!
+  addedAt: DateTime!
+  notes: String
+  quote: Quote
+}
+
+# -------------------------
+# Webhooks
+# -------------------------
+
+type Webhook {
+  webhookId: ID!
+  customerId: ID!
+  url: String!
+  events: [String!]!
+  isActive: Boolean!
+  secret: String
+  createdAt: DateTime!
+  lastDeliveredAt: DateTime
+}
+
+# -------------------------
+# Root Types
+# -------------------------
+
+type Query {
+  # Auth
+  me: Customer
+
+  # Accounts
+  account(accountId: ID!): Account
+  accounts(customerId: ID!): [Account!]!
+  accountBalance(accountId: ID!): AccountBalance
+
+  # Positions
+  positions(accountId: ID!): Positions
+  holding(holdingId: ID!): Holding
+
+  # Quotes and Market Data
+  quote(symbol: String!): Quote
+  quotes(symbols: [String!]!): [Quote!]!
+  historicalData(symbol: String!, period: String!, interval: String!): HistoricalData
+  marketData: MarketData
+  optionChain(symbol: String!, expiration: Date): OptionChain
+
+  # Corporate Actions
+  dividendHistory(symbol: String!): DividendHistory
+  splitHistory(symbol: String!): SplitHistory
+  earnings(symbol: String!, periods: Int): [Earning!]!
+
+  # Orders and Transactions
+  order(orderId: ID!): TradeOrder
+  orders(accountId: ID!, status: OrderStatus): [TradeOrder!]!
+  transactions(accountId: ID!, startDate: Date, endDate: Date): [Transaction!]!
+
+  # Documents
+  statements(accountId: ID!): [Statement!]!
+  confirmations(accountId: ID!): [ConfirmationSlip!]!
+  taxDocuments(accountId: ID!, taxYear: Int): [TaxDocument!]!
+  costBasisReport(accountId: ID!, symbol: String!): CostBasisReport
+
+  # Research and News
+  research(symbol: String!): [Research!]!
+  news(symbols: [String!], limit: Int): [NewsArticle!]!
+  ratings(symbol: String!): [Rating!]!
+
+  # Portfolio
+  portfolioAnalysis(accountId: ID!): PortfolioAnalysis
+
+  # Alerts and Watchlists
+  alerts(customerId: ID!): [Alert!]!
+  watchLists(customerId: ID!): [WatchList!]!
+  watchList(watchListId: ID!): WatchList
+}
+
+type Mutation {
+  # Auth
+  authenticate(username: String!, password: String!): Auth
+  refreshToken(refreshToken: String!): Token
+
+  # Orders
+  placeMarketOrder(accountId: ID!, symbol: String!, side: OrderSide!, quantity: Decimal!): MarketOrder
+  placeLimitOrder(accountId: ID!, symbol: String!, side: OrderSide!, quantity: Decimal!, limitPrice: Decimal!, duration: OrderDuration!): LimitOrder
+  placeStopOrder(accountId: ID!, symbol: String!, side: OrderSide!, quantity: Decimal!, stopPrice: Decimal!, duration: OrderDuration!): StopOrder
+  placeStopLimitOrder(accountId: ID!, symbol: String!, side: OrderSide!, quantity: Decimal!, stopPrice: Decimal!, limitPrice: Decimal!, duration: OrderDuration!): StopLimitOrder
+  cancelOrder(orderId: ID!): TradeOrder
+
+  # Alerts
+  createAlert(customerId: ID!, symbol: String, alertType: AlertType!, condition: String!, threshold: Decimal): Alert
+  deleteAlert(alertId: ID!): Boolean!
+
+  # Watchlists
+  createWatchList(customerId: ID!, name: String!): WatchList
+  addToWatchList(watchListId: ID!, symbol: String!): WatchListItem
+  removeFromWatchList(watchListId: ID!, itemId: ID!): Boolean!
+  deleteWatchList(watchListId: ID!): Boolean!
+
+  # Webhooks
+  createWebhook(customerId: ID!, url: String!, events: [String!]!): Webhook
+  deleteWebhook(webhookId: ID!): Boolean!
+}
+
+type Subscription {
+  quoteUpdated(symbol: String!): Quote
+  orderStatusChanged(orderId: ID!): TradeOrder
+  alertTriggered(customerId: ID!): Alert
+  portfolioValueChanged(accountId: ID!): AccountBalance
+}

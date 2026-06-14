@@ -4,68 +4,74 @@ name: Fidelity Investments
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Financial Services
-  - Asset Management
-  - Brokerage
-  - Wealth Management
-  - Retirement
-description: 'One of the largest financial services companies in the world providing investment management, retirement planning, brokerage, and wealth management services. Manages trillions of dollars in assets and serves tens of millions of individual investors and institutions. Fidelity does not run a public developer portal; partner integrations are delivered through curated marketplace relationships and through Fidelity Institutional / Wealthscape for advisors.'
+- Financial Services
+- Asset Management
+- Brokerage
+- Wealth Management
+- Retirement
+description: One of the largest financial services companies in the world providing
+  investment management, retirement planning, brokerage, and wealth management services.
+  Manages trillions of dollars in assets and serves tens of millions of individual
+  investors and institutions. Fidelity does not run a public developer portal; partner
+  integrations are delivered through curated marketplace relationships and through
+  Fidelity Institutional / Wealthscape for advisors.
 created: '2026-05-05'
 modified: '2026-05-16'
 specificationVersion: '0.19'
 apis: []
 x-no-public-api: true
-x-no-public-api-reason: >-
-  Fidelity Investments does not publish a public developer portal, OpenAPI
-  specifications, retail brokerage API, or self-serve partner API documentation.
-  Fidelity Institutional / Wealthscape and the Fidelity Marketplace surface
-  vetted third-party integrations to advisors and retail clients, but the
-  underlying connections are arranged through institutional onboarding and BD
-  agreements rather than a public API program.
+x-no-public-api-reason: Fidelity Investments does not publish a public developer portal,
+  OpenAPI specifications, retail brokerage API, or self-serve partner API documentation.
+  Fidelity Institutional / Wealthscape and the Fidelity Marketplace surface vetted
+  third-party integrations to advisors and retail clients, but the underlying connections
+  are arranged through institutional onboarding and BD agreements rather than a public
+  API program.
 common:
-  - type: GitHubOrganization
-    url: https://github.com/fidelity
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/fidelity-investments
-  - type: Website
-    url: https://www.fidelity.com/
-  - type: Integrations
-    url: https://www.fidelity.com/go/marketplace/overview
-  - type: Institutional
-    url: https://institutional.fidelity.com/
-  - type: Wealthscape
-    url: https://wealthscape.com/
-  - type: InvestorRelations
-    url: https://www.fidelity.com/about-fidelity/corporate
-  - type: News
-    url: https://www.fidelity.com/about-fidelity/newsroom
-  - type: Careers
-    url: https://jobs.fidelity.com/
-  - type: ContactUs
-    url: https://www.fidelity.com/customer-service/contact-us
-  - type: PrivacyPolicy
-    url: https://www.fidelity.com/privacy/overview
-  - type: TermsOfService
-    url: https://www.fidelity.com/customer-service/conditions-of-use
-  - type: Login
-    url: https://login.fidelity.com/
+- type: GitHubOrganization
+  url: https://github.com/fidelity
+- type: LinkedIn
+  url: https://www.linkedin.com/company/fidelity-investments
+- type: Website
+  url: https://www.fidelity.com/
+- type: Integrations
+  url: https://www.fidelity.com/go/marketplace/overview
+- type: Institutional
+  url: https://institutional.fidelity.com/
+- type: Wealthscape
+  url: https://wealthscape.com/
+- type: InvestorRelations
+  url: https://www.fidelity.com/about-fidelity/corporate
+- type: News
+  url: https://www.fidelity.com/about-fidelity/newsroom
+- type: Careers
+  url: https://jobs.fidelity.com/
+- type: ContactUs
+  url: https://www.fidelity.com/customer-service/contact-us
+- type: PrivacyPolicy
+  url: https://www.fidelity.com/privacy/overview
+- type: TermsOfService
+  url: https://www.fidelity.com/customer-service/conditions-of-use
+- type: Login
+  url: https://login.fidelity.com/
+- url: graphql/fidelity-investments-graphql.md
+  type: GraphQL
 integrations:
-  - name: TurboTax
-  - name: EY TaxChat
-  - name: Leader Bank
-  - name: HomeStory
-  - name: Avvo
-  - name: Money Management International
-  - name: Credible
-  - name: Collegewise
-  - name: Kaplan
-  - name: ACT
-  - name: Niche
-  - name: Fastweb
-  - name: IDNotifty
-  - name: EverSafe
-  - name: Proof
-  - name: Wellthy
-  - name: Alska
-  - name: NotaryCam
-  - name: Fidelity.com Home
+- name: TurboTax
+- name: EY TaxChat
+- name: Leader Bank
+- name: HomeStory
+- name: Avvo
+- name: Money Management International
+- name: Credible
+- name: Collegewise
+- name: Kaplan
+- name: ACT
+- name: Niche
+- name: Fastweb
+- name: IDNotifty
+- name: EverSafe
+- name: Proof
+- name: Wellthy
+- name: Alska
+- name: NotaryCam
+- name: Fidelity.com Home
