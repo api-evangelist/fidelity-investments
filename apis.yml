@@ -27,6 +27,8 @@ x-no-public-api-reason: Fidelity Investments does not publish a public developer
   are arranged through institutional onboarding and BD agreements rather than a public
   API program.
 common:
+- type: DomainSecurity
+  url: security/fidelity-investments-domain-security.yml
 - type: GitHubOrganization
   url: https://github.com/fidelity
 - type: LinkedIn
