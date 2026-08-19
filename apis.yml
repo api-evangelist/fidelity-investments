@@ -28,7 +28,7 @@ description: One of the largest financial services companies in the world provid
   Fidelity Institutional / Wealthscape for advisors.
 created: '2026-05-05'
 modified: '2026-05-16'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis: []
 x-no-public-api: true
 x-no-public-api-reason: Fidelity Investments does not publish a public developer portal,
