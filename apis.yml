@@ -15,6 +15,12 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/fidelity-investments.png
 tags:
+- Financial-Services
+- Asset Management
+- Brokerage
+- Wealth Management
+- Retirement
+tags_raw:
 - Financial Services
 - Asset Management
 - Brokerage
