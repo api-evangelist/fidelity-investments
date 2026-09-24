@@ -26,7 +26,7 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/fidelity-investments.png
 tags:
-- Financial-Services
+- Financial Services
 - Asset Management
 - Brokerage
 - Wealth Management
@@ -37,6 +37,7 @@ tags_raw:
 - Brokerage
 - Wealth Management
 - Retirement
+- Financial-Services
 description: One of the largest financial services companies in the world providing
   investment management, retirement planning, brokerage, and wealth management services.
   Manages trillions of dollars in assets and serves tens of millions of individual
@@ -83,8 +84,6 @@ common:
   url: https://www.fidelity.com/customer-service/conditions-of-use
 - type: Login
   url: https://login.fidelity.com/
-- url: graphql/fidelity-investments-graphql.md
-  type: GraphQL
 integrations:
 - name: TurboTax
 - name: EY TaxChat
