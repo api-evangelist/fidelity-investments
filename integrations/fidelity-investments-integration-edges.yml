@@ -1,28 +1,37 @@
 edges:
-- partner_name: FDX (Financial Data Exchange)
-  partner: fdx
+- partner_name: SEC (investment adviser registration)
+  partner: null
+  partner_match: register
   type: contract
-  channel: standard-directory
+  channel: regulator-register
   relationship: standard-participant
   direction: partner-built
-  evidence: https://registry.financialdataexchange.org/
+  evidence: https://adviserinfo.sec.gov/firm/summary/108281
+  category: Investment adviser
   contract_reference:
-    register: FDX Registry
-    standard: FDX API
+    register: SEC Investment Adviser Public Disclosure (IAPD compilation feed, Form ADV Part 1A)
     spec_file: null
-    register_api: https://registry.financialdataexchange.org/fdxregistryapi/organizations/search/listingTags
-    role: data-provider
-    member_type: MEMBER
-    registered_name: Fidelity
-    register_id: 122
-    registered_website: https://www.fidelity.com
-    country: United States
-    fdx_version: null
-    matched_by: domain:fidelity.com
-    detected_by: sweep-fdx.py
-    detected: '2026-10-14'
-  detected_by: sweep-fdx.py
-  first_seen: '2026-10-14'
+    standard: Investment Advisers Act of 1940 (SEC Form ADV)
+    role: sec-registered-investment-adviser
+    registered_name: FIDELITY MANAGEMENT & RESEARCH COMPANY LLC
+    business_name: null
+    register_id: CRD 108281
+    sec_file_number: 801-7884
+    registration_status: APPROVED
+    registered_since: '1971-11-29'
+    main_office: BOSTON, MA, United States
+    matched_domain: fidelity.com
+    matched_by: domain+verified
+    identity_source: registrant's own Form ADV Item 1.I website address (no lookup)
+    custody_of_client_assets: true
+    signal_note: 'participation only: SEC registration is not a certification; firm type, custody and office are
+      context, never counted; regulatory AUM is not recorded (breadth is not credit)'
+    detected_by: sweep-asset-management.py
+    detected: '2026-10-18'
+    verified: Fidelity Management & Research Company is Fidelity Investments' fund adviser on fidelity.com; all/fidelity-investments
+      is named 'Fidelity Investments'
+  detected_by: sweep-asset-management.py
+  first_seen: '2026-10-18'
 - partner_name: ISO 10383 (MIC)
   partner: null
   type: register
@@ -67,47 +76,39 @@ edges:
       legal_name: ''
       country: US
     detected_by: sweep-capital-markets.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-capital-markets.py
-  first_seen: '2026-10-15'
-- partner_name: SEC (investment adviser registration)
-  partner: null
-  partner_match: register
+  first_seen: '2026-10-19'
+- partner_name: FDX (Financial Data Exchange)
+  partner: fdx
   type: contract
-  channel: regulator-register
+  channel: standard-directory
   relationship: standard-participant
   direction: partner-built
-  evidence: https://adviserinfo.sec.gov/firm/summary/108281
-  category: Investment adviser
+  evidence: https://registry.financialdataexchange.org/
   contract_reference:
-    register: SEC Investment Adviser Public Disclosure (IAPD compilation feed, Form ADV Part 1A)
+    register: FDX Registry
+    standard: FDX API
     spec_file: null
-    standard: Investment Advisers Act of 1940 (SEC Form ADV)
-    role: sec-registered-investment-adviser
-    registered_name: FIDELITY MANAGEMENT & RESEARCH COMPANY LLC
-    business_name: null
-    register_id: CRD 108281
-    sec_file_number: 801-7884
-    registration_status: APPROVED
-    registered_since: '1971-11-29'
-    main_office: BOSTON, MA, United States
-    matched_domain: fidelity.com
-    matched_by: domain+verified
-    identity_source: registrant's own Form ADV Item 1.I website address (no lookup)
-    custody_of_client_assets: true
-    signal_note: 'participation only: SEC registration is not a certification; firm type, custody and office are
-      context, never counted; regulatory AUM is not recorded (breadth is not credit)'
-    detected_by: sweep-asset-management.py
-    detected: '2026-10-18'
-    verified: Fidelity Management & Research Company is Fidelity Investments' fund adviser on fidelity.com; all/fidelity-investments
-      is named 'Fidelity Investments'
-  detected_by: sweep-asset-management.py
-  first_seen: '2026-10-18'
+    register_api: https://registry.financialdataexchange.org/fdxregistryapi/organizations/search/listingTags
+    role: data-provider
+    member_type: MEMBER
+    registered_name: Fidelity
+    register_id: 122
+    registered_website: https://www.fidelity.com
+    country: United States
+    fdx_version: null
+    matched_by: domain:fidelity.com
+    detected_by: sweep-fdx.py
+    detected: '2026-10-19'
+  detected_by: sweep-fdx.py
+  first_seen: '2026-10-19'
 generated: '2026-10-14'
 method: searched
 checked:
 - https://registry.financialdataexchange.org/
 - https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_17_2026.xml.gz
+- https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_19_2026.xml.gz
 - https://www.iso20022.org/sites/default/files/ISO10383_MIC/ISO10383_MIC.csv
 - https://www.wealthbox.com/wp-json/wp/v2/integrations?per_page=100&page=1
 source:
