@@ -103,6 +103,53 @@ edges:
     detected: '2026-10-19'
   detected_by: sweep-fdx.py
   first_seen: '2026-10-19'
+- partner_name: Arch User Repository (AUR)
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official CLI (Arch User Repository (AUR))
+  evidence: https://aur.archlinux.org/packages/kconnect
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Arch User Repository (AUR) (public package index)
+    spec_file: null
+    packages:
+    - name: kconnect
+      kind: aur
+      version: 0.5.23-1
+      released: '2026-06-01'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/kconnect
+      upstream: https://github.com/fidelity/kconnect
+      cli: 'AUR description: CLI utility that can be used to discover and securely access Kubernetes clusters'
+      repo_leg: github-org:fidelity
+      publisher_leg: artifact-github-org:fidelity
+      matched_by: github-org
+    - name: kconnect-bin
+      kind: aur
+      version: 0.5.23-1
+      released: '2026-06-01'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/kconnect-bin
+      upstream: https://github.com/fidelity/kconnect
+      cli: 'AUR description: CLI utility that can be used to discover and securely access Kubernetes clusters'
+      repo_leg: github-org:fidelity
+      publisher_leg: artifact-github-org:fidelity
+      matched_by: github-org
+    current: true
+    signal_note: 'the provider''s own command-line tool packaged for Arch Linux (community-maintained PKGBUILD whose
+      upstream and source artifact are the provider''s): distribution, not an integration; lapsed = flagged out-of-date
+      or not updated in 24 months'
+    detected_by: sweep-aur-vendor-cli-packages.py
+    detected: '2026-10-23'
+  detected_by: sweep-aur-vendor-cli-packages.py
+  first_seen: '2026-10-23'
 generated: '2026-10-14'
 method: searched
 checked:
@@ -111,6 +158,9 @@ checked:
 - https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_19_2026.xml.gz
 - https://www.iso20022.org/sites/default/files/ISO10383_MIC/ISO10383_MIC.csv
 - https://www.wealthbox.com/wp-json/wp/v2/integrations?per_page=100&page=1
+- https://aur.archlinux.org/cgit/aur.git/tree/.SRCINFO
+- https://aur.archlinux.org/packages-meta-ext-v1.json.gz
+- https://aur.archlinux.org/rpc/v5/info
 source:
 - https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_17_2026.xml.gz
 - https://www.wealthbox.com/wp-json/wp/v2/integrations?per_page=100&page=1
